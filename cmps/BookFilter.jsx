@@ -1,19 +1,18 @@
-
 const { useState, useEffect } = React
-
 
 export function BookFilter({ filterBy, onSetFilter }) {
 
-    const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
+    const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy, title: filterBy.title || '', price: filterBy.price || '' })
+
 
     useEffect(() => {
-        onSetFilter(filterByToEdit)
-    }, [filterByToEdit])
+        // The debounced function is called here, with a 500ms delay
+        const timeoutId = setTimeout(() => {
+            onSetFilter(filterByToEdit)
+        }, 500);
 
-    function onSetFilterBy(ev) {
-        ev.preventDefault()
-        onSetFilter(filterByToEdit)
-    }
+        return () => clearTimeout(timeoutId);
+    }, [filterByToEdit])
 
     function handleChange({ target }) {
         const field = target.name
@@ -21,7 +20,6 @@ export function BookFilter({ filterBy, onSetFilter }) {
 
         switch (target.type) {
             case 'number':
-            case 'range':
                 value = +value
                 break;
 
@@ -36,31 +34,23 @@ export function BookFilter({ filterBy, onSetFilter }) {
         setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
     }
 
-    // function handleTxtChange({ target }) {
-    //     const value = target.value
-    //     setFilterByToEdit(prevFilterBy => ({ ...prevFilterBy, txt: value }))
-    //     // setFilterByToEdit(prevFilterBy => {
-    //     //     return { ...prevFilterBy, txt: value }
-    //     // })
-    // }
+    function onSetFilterBy(ev) {
+        ev.preventDefault();
+        onSetFilter(filterByToEdit);
+    }
 
-    // function handleMinSpeedChange({ target }) {
-    //     const value = target.value
-    //     setFilterByToEdit(prevFilterBy => ({ ...prevFilterBy, minSpeed: value }))
-    // }
-
-    const { txt, minSpeed } = filterByToEdit
+    const { title, price } = filterByToEdit
     return (
         <section className="book-filter">
             <h2>Filter Our Books</h2>
-            <form onSubmit={onSetFilterBy} >
-                <label htmlFor="txt">Vendor: </label>
-                <input value={txt} onChange={handleChange} type="text" id="txt" name="txt" />
+            <form onSubmit={onSetFilterBy}>
+                <label htmlFor="title">Book Title: </label>
+                <input value={title} onChange={handleChange} type="text" id="title" name="title" />
 
-                <label htmlFor="minSpeed">minSpeed: </label>
-                <input value={minSpeed || ''} onChange={handleChange} type="number" id="minSpeed" name="minSpeed" />
+                <label htmlFor="price">Price: </label>
+                <input value={price || ''} onChange={handleChange} type="number" id="price" name="price" />
 
-                <button>Submit</button>
+                <button type="submit">Filter</button>
             </form>
         </section>
     )
