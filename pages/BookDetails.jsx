@@ -23,14 +23,14 @@ export function BookDetails({ bookId, onBack }) {
             <p className="book-sub-title">By {book.subtitle}</p>
             <p className="book-author">By {book.authors}</p>
 
-
             <div className="book-stats">
-            <p className="book-price">Price: {book.listPrice.amount}{book.listPrice.currencyCode}</p>
+                <p className="book-price">Price: {book.listPrice.amount}{book.listPrice.currencyCode}</p>
                 <p className="book-publish-date">Published at: {book.publishedDate}</p>
                 <p className="book-page-count">Pages: {book.pageCount}</p>
                 <p className="book-language">Language: {book.language}</p>
                 <p className="book-id">ID: {book.id}</p>
             </div>
+
             <button onClick={onBack}>Back</button>
         </section>
     )
