@@ -15,7 +15,7 @@ export function BookIndex() {
         loadBooks()
     }, [filterBy])
 
-    
+
 
     function loadBooks() {
         bookService.query(filterBy)
@@ -42,6 +42,7 @@ export function BookIndex() {
     }
 
     function onSetFilter(filterBy) {
+        console.log(filterBy)
         setFilterBy(filterBy)
     }
 
