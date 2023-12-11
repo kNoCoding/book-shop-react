@@ -4,52 +4,51 @@ const { useState, useEffect } = React
 
 
 export function BookEdit() {
-    const [bookToEdit, setBookToEdit] = useState(bookService.getEmptyCar())
-    console.log('bookToEdit:', bookToEdit)
-    const navigate = useNavigate()
-    const params = useParams()
+    const [bookToEdit, setBookToEdit] = useState(bookService.getEmptyBook());
+    const navigate = useNavigate();
+    const params = useParams();
 
     useEffect(() => {
         if (params.bookId) {
-            loadBook()
+            loadBook();
         }
-    }, [])
+    }, [params.bookId]);  // Ensure useEffect runs when bookId changes
 
     function loadBook() {
         bookService.get(params.bookId)
-            .then(setBookToEdit)
-            .catch(err=>console.log('err:', err))
+            .then(book => {
+                if (!book.listPrice) {  // Handle cases where listPrice might be missing
+                    book.listPrice = { amount: 0 };
+                }
+                setBookToEdit(book);
+            })
+            .catch(err => console.log('err:', err));
     }
 
     function handleChange({ target }) {
-        const field = target.name
-        let value = target.value
+        const field = target.name;
+        let value = target.type === 'number' ? +target.value : target.value;
 
-        switch (target.type) {
-            case 'number':
-            case 'range':
-                value = +value
-                break;
-
-            case 'checkbox':
-                value = target.checked
-                break
-
-            default:
-                break;
+        if (field === 'price') {
+            // Update the nested price value
+            setBookToEdit(prevBook => ({
+                ...prevBook,
+                listPrice: { ...prevBook.listPrice, amount: value }
+            }));
+        } else {
+            setBookToEdit(prevBook => ({ ...prevBook, [field]: value }));
         }
-
-        setBookToEdit(prevBook => ({ ...prevBook, [field]: value }))
     }
 
     function onSaveBook(ev) {
-        ev.preventDefault()
+        ev.preventDefault();
         bookService.save(bookToEdit)
             .then(() => navigate('/book'))
-            .catch(err => console.log('err:', err))
+            .catch(err => console.log('err:', err));
     }
 
-    const { title, price } = bookToEdit
+    const { title, listPrice: { amount: price } } = bookToEdit;
+
     return (
         <section className="book-edit">
             <h1>Add Book</h1>
@@ -61,7 +60,6 @@ export function BookEdit() {
                 <input onChange={handleChange} value={price} type="number" name="price" id="price" />
                 <button disabled={!title}>Save</button>
             </form>
-
         </section>
-    )
+    );
 }

@@ -44,8 +44,12 @@ function save(book) {
     }
 }
 
-function getEmptyBook(vendor = '', maxSpeed = '') {
-    return { id: '', vendor, maxSpeed }
+function getEmptyBook() {
+    return {
+        id: '',
+        title: '',
+        listPrice: { amount: 0 }  // Nested structure for price
+    }
 }
 
 function getDefaultFilter() {
@@ -60,8 +64,8 @@ function _createBooks() {
     }
 }
 
-function _createBook(vendor, maxSpeed = 250) {
-    const book = getEmptyBook(vendor, maxSpeed)
+function _createBook(title, price = 250) {
+    const book = getEmptyBook(title, price)
     book.id = utilService.makeId()
     return book
 }
