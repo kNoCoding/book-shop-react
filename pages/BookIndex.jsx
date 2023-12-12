@@ -46,13 +46,21 @@ export function BookIndex() {
     }
 
     const { title, price } = filterBy
+    const Button = ({ onClick, children, as: Component = 'button', ...rest }) => {
+        return (
+            <Component onClick={onClick} className="button" {...rest}>
+                {children}
+            </Component>
+        );
+    };
 
     if (!books) return <div>Loading...</div>
     return (
         <section className="book-index ">
             <h1>Welcome to book index!</h1>
             <BookFilter filterBy={{ title, price }} onSetFilter={onSetFilter} />
-            <Link to="/book/edit">Add</Link>
+            <Link to="/book/edit" className="add-new-book-button" >Add New Book</Link>
+            {/* <Button as={Link} to="/book/edit" className="add-new-book-button">Add New Book</Button> */}
             <BookList books={books} onRemoveBook={onRemoveBook} />
         </section>
     )

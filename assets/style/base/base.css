@@ -2,8 +2,7 @@
   box-sizing: border-box;
 }
 
-html {
-}
+html {}
 
 body {
   margin: 0;
@@ -42,4 +41,13 @@ object {
 /* Simple and useful CSS Debugging Technique */
 .debug * {
   outline: 1px solid gold
+}
+
+
+/* MOVE THIS TO THE CORRECT CSS FILE  */
+.add-new-book-button {
+  background-color: lightseagreen;
+  padding: .5em;
+  border-radius: .5em;
+
 }
