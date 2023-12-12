@@ -28,7 +28,7 @@ export function App() {
                 <AppHeader />
                 <main>
                     <Routes>
-                        <Route path="/" element={<Navigate to="/home" />} />
+                        {/* <Route path="/" element={<Navigate to="/home" />} /> */}
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<About />} >
                             <Route path="/about/team" element={<Team />} />

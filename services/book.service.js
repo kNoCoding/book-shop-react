@@ -12,6 +12,7 @@ export const bookService = {
     save,
     getEmptyBook,
     getDefaultFilter,
+    getNextBook,
 }
 
 function query(filterBy) {
@@ -56,6 +57,14 @@ function getDefaultFilter() {
     return { txt: '', price: '' }
 }
 
+function getNextBook(bookId) {
+    const books = _loadBooksFromStorage(BOOK_KEY)
+    const bookIdx = books.findIndex(book => book.id === bookId)
+    const nextBookIdx = bookIdx + 1 === books.length ? 0 : bookIdx + 1
+
+    return books[nextBookIdx].id
+}
+
 function _createBooks() {
     let books = utilService.loadFromStorage(BOOK_KEY)
     if (!books || !books.length) {
@@ -68,4 +77,8 @@ function _createBook(title, price = 250) {
     const book = getEmptyBook(title, price)
     book.id = utilService.makeId()
     return book
+}
+
+function _loadBooksFromStorage(entityType) {
+    return JSON.parse(localStorage.getItem(entityType))
 }

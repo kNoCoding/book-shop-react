@@ -6,16 +6,17 @@ const { useState, useEffect } = React
 export function BookDetails() {
 
     const [book, setBook] = useState(null)
-    const params = useParams()
+    const { bookId } = useParams()
     const navigate = useNavigate()
 
     useEffect(() => {
         loadBook()
-    }, [params.bookId])
+        console.log(bookId)
+    }, [bookId])
 
 
     function loadBook() {
-        bookService.get(params.bookId)
+        bookService.get(bookId)
             .then(book => setBook(book))
             .catch(err => {
                 console.log('err:', err)
@@ -28,8 +29,9 @@ export function BookDetails() {
         // navigate(-1)
     }
 
-
     if (!book) return <div>Loading...</div>
+    const nextBookId = bookService.getNextBook(book.id)
+    console.log(nextBookId)
     return (
         <section className="book-details">
 
@@ -49,7 +51,8 @@ export function BookDetails() {
             </div>
 
             <button onClick={onBack}>Back</button>
-            {/* <Link to={`/car/u4QgwL`}>Next Car</Link> */}
+            <Link to={`/book/${nextBookId}`}>Next Book</Link>
+            {/* <button onClick={onNext}></button> */}
         </section>
     )
 }
